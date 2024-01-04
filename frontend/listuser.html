@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lihat Semua Pengguna</title>
+  <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Semua Pengguna</h2>
+    <table id="tabelPengguna">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Username</th>
+          <th>Name</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody id="daftarPengguna">
+        <!-- Data pengguna akan ditambahkan secara dinamis di sini -->
+      </tbody>
+    </table>
+    <div class="links">
+        <a href="index.html">Kembali ke Halaman Login</a>
+        <a href="tambahuser.html">Daftar Pengguna Baru</a>
+    </div>
+  </div>
+
+  <script>
+    // Ambil data pengguna dari REST API
+    fetch('http://localhost:5000/user',{
+        method : 'GET'
+    })
+      .then(response => response.json())
+      .then(data => {
+        const tabelPengguna = document.getElementById('tabelPengguna');
+        const daftarPengguna = document.getElementById('daftarPengguna');
+        // Loop melalui data pengguna yang diambil dan buat baris baru dalam tabel
+        data.forEach(pengguna => {
+          const row = daftarPengguna.insertRow();
+          row.innerHTML = `
+            <td>${pengguna.userid}</td>
+            <td>${pengguna.username}</td>
+            <td>${pengguna.name}</td>
+            <td>${pengguna.email}</td>
+          `;
+          tabelPengguna.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching user data:', error);
+      });
+  </script>
+</body>
+</html>

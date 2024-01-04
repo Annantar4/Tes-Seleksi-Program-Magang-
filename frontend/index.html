@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halaman Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form id="loginForm" action="/login" method="post">
+      <input type="text" id="username" name="username" placeholder="Username" required>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <button type="button" onclick="login()">Login</button>
+    </form>
+    <div class="links">
+      <a href="listuser.html">Lihat Semua User</a>
+      <a href="tambahuser.html">Daftar User Baru</a>
+    </div>
+  </div>
+  <p id="loginStatus"></p>
+  <p id="userInfo"></p>
+  <script>  
+    
+function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Login gagal');
+        }
+    })
+    .then(data => {
+        // Tindakan setelah login berhasil, misalnya menampilkan pesan sukses
+        document.getElementById('loginStatus').innerText = 'Login berhasil';
+       
+       document.getElementById('userInfo').innerText = `Username : ${data.username}\n Name : ${data.name}\n Email : ${data.email}`;
+    })
+    .catch(error => {
+        // Tindakan jika login gagal, misalnya menampilkan pesan error
+        document.getElementById('loginStatus').innerText = 'Login gagal';
+        document.getElementById('userInfo').innerText = 'Periksa kembali Username/Password';
+
+    });
+}
+
+  </script>
+</body>
+</html>
